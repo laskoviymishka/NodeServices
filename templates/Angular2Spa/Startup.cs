@@ -29,8 +29,10 @@ namespace WebApplicationBasic
         {
             app.UseDeveloperExceptionPage();
 
-            if (env.IsDevelopment()) {
-                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
+            if (env.IsDevelopment())
+            {
+                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+                {
                     HotModuleReplacement = true
                 });
             }

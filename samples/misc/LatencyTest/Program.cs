@@ -1,31 +1,44 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.NodeServices;
-
-namespace ConsoleApplication
+﻿namespace LatencyTest
 {
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.NodeServices;
+
     // This project is a micro-benchmark for .NET->Node RPC via NodeServices. It doesn't reflect
     // real-world usage patterns (you're not likely to make hundreds of sequential calls like this),
     // but is a starting point for comparing the overhead of different hosting models and transports. 
     public class Program
     {
-        public static void Main(string[] args) {
-            using (var nodeServices = CreateNodeServices(NodeHostingModel.Http)) {                
+        public static void Main(string[] args)
+        {
+            Console.WriteLine("Run for NodeHostingModel.Http");
+            using (var nodeServices = CreateNodeServices(NodeHostingModel.Http))
+            {
                 MeasureLatency(nodeServices).Wait();
             }
+
+            Console.WriteLine("Run for NodeHostingModel.InputOutputStream");
+            using (var nodeServices = CreateNodeServices(NodeHostingModel.InputOutputStream))
+            {
+                MeasureLatency(nodeServices).Wait();
+            }
+
+            Console.Read();
         }
 
-        private static async Task MeasureLatency(INodeServices nodeServices) {
+        private static async Task MeasureLatency(INodeServices nodeServices)
+        {
             // Ensure the connection is open, so we can measure per-request timings below
             var response = await nodeServices.Invoke<string>("latencyTest", "C#");
             Console.WriteLine(response);
-            
+
             // Now perform a series of requests, capturing the time taken
             const int requestCount = 100;
             var watch = Stopwatch.StartNew();
-            for (var i = 0; i < requestCount; i++) {
+            for (var i = 0; i < requestCount; i++)
+            {
                 await nodeServices.Invoke<string>("latencyTest", "C#");
             }
 
@@ -35,11 +48,13 @@ namespace ConsoleApplication
             Console.WriteLine("\nTime per invocation: {0:F2} milliseconds", 1000 * elapsedSeconds / requestCount);
         }
 
-        private static INodeServices CreateNodeServices(NodeHostingModel hostingModel) {
-            return Configuration.CreateNodeServices(new NodeServicesOptions {
+        private static INodeServices CreateNodeServices(NodeHostingModel hostingModel)
+        {
+            return Configuration.CreateNodeServices(new NodeServicesOptions
+            {
                 HostingModel = hostingModel,
                 ProjectPath = Directory.GetCurrentDirectory(),
-                WatchFileExtensions = new string[] {} // Don't watch anything
+                WatchFileExtensions = new string[] { } // Don't watch anything
             });
         }
     }

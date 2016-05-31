@@ -14,7 +14,7 @@ namespace ES2015Example
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            
+
             // Enable Node Services
             services.AddNodeServices();
         }
@@ -25,11 +25,14 @@ namespace ES2015Example
             app.UseDeveloperExceptionPage();
 
             // Dynamically transpile any .js files under the '/js/' directory
-            app.Use(next => async context => {
+            app.Use(next => async context =>
+            {
                 var requestPath = context.Request.Path.Value;
-                if (requestPath.StartsWith("/js/") && requestPath.EndsWith(".js")) {
+                if (requestPath.StartsWith("/js/") && requestPath.EndsWith(".js"))
+                {
                     var fileInfo = env.WebRootFileProvider.GetFileInfo(requestPath);
-                    if (fileInfo.Exists) {
+                    if (fileInfo.Exists)
+                    {
                         var transpiled = await nodeServices.Invoke<string>("transpilation.js", fileInfo.PhysicalPath, requestPath);
                         await context.Response.WriteAsync(transpiled);
                         return;
