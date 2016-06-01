@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.SpaServices;
+using Microsoft.AspNetCore.SpaServices.Prerendering;
 
 namespace WebApplicationBasic
 {
@@ -18,6 +20,11 @@ namespace WebApplicationBasic
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddPrerender(provider => new PrerenderOptions
+            {
+                PayloadProvider = context => new[] { new { Food = "Borsch", Drink = "Vodka" } },
+            });
+
             services.AddMvc().AddJsonOptions(options =>
             {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -29,8 +36,10 @@ namespace WebApplicationBasic
         {
             app.UseDeveloperExceptionPage();
 
-            if (env.IsDevelopment()) {
-                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
+            if (env.IsDevelopment())
+            {
+                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+                {
                     HotModuleReplacement = true
                 });
             }
@@ -55,6 +64,8 @@ namespace WebApplicationBasic
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseKestrel()
+                .UseUrls(new[] { "http://localhost:5001" })
+                .UseEnvironment("Development")
                 .UseStartup<Startup>()
                 .Build();
 

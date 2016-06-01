@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SpaServices;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -13,19 +13,16 @@ namespace Webpack
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddPrerender();
             services.AddMvc();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IHostingEnvironment env)
         {
             app.UseDeveloperExceptionPage();
 
-            // For real apps, you should only use Webpack Dev Middleware at development time. For production,
-            // you'll get better performance and reliability if you precompile the webpack output and simply
-            // serve the resulting static files. For examples of setting up this automatic switch between
-            // development-style and production-style webpack usage, see the 'templates' dir in this repo.
-            app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
+            app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+            {
                 HotModuleReplacement = true
             });
 
@@ -45,6 +42,7 @@ namespace Webpack
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseKestrel()
+                .UseUrls(new[] { "http://localhost:5002" })
                 .UseStartup<Startup>()
                 .Build();
 

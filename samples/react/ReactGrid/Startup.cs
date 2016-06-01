@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.NodeServices;
 
 namespace ReactGrid
 {
@@ -18,6 +19,11 @@ namespace ReactGrid
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddNodeServices(new NodeServicesOptions
+            {
+                HostingModel = NodeHostingModel.InputOutputStream
+            });
+
             services.AddMvc().AddJsonOptions(options =>
             {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
@@ -29,8 +35,10 @@ namespace ReactGrid
         {
             app.UseDeveloperExceptionPage();
 
-            if (env.IsDevelopment()) {
-                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
+            if (env.IsDevelopment())
+            {
+                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+                {
                     HotModuleReplacement = true,
                     ReactHotModuleReplacement = true
                 });

@@ -11,21 +11,25 @@ namespace ConsoleApplication
     // but is a starting point for comparing the overhead of different hosting models and transports. 
     public class Program
     {
-        public static void Main(string[] args) {
-            using (var nodeServices = CreateNodeServices(NodeHostingModel.Http)) {                
+        public static void Main(string[] args)
+        {
+            using (var nodeServices = CreateNodeServices(NodeHostingModel.Http))
+            {
                 MeasureLatency(nodeServices).Wait();
             }
         }
 
-        private static async Task MeasureLatency(INodeServices nodeServices) {
+        private static async Task MeasureLatency(INodeServices nodeServices)
+        {
             // Ensure the connection is open, so we can measure per-request timings below
             var response = await nodeServices.Invoke<string>("latencyTest", "C#");
             Console.WriteLine(response);
-            
+
             // Now perform a series of requests, capturing the time taken
             const int requestCount = 100;
             var watch = Stopwatch.StartNew();
-            for (var i = 0; i < requestCount; i++) {
+            for (var i = 0; i < requestCount; i++)
+            {
                 await nodeServices.Invoke<string>("latencyTest", "C#");
             }
 
@@ -35,11 +39,13 @@ namespace ConsoleApplication
             Console.WriteLine("\nTime per invocation: {0:F2} milliseconds", 1000 * elapsedSeconds / requestCount);
         }
 
-        private static INodeServices CreateNodeServices(NodeHostingModel hostingModel) {
-            return Configuration.CreateNodeServices(new NodeServicesOptions {
+        private static INodeServices CreateNodeServices(NodeHostingModel hostingModel)
+        {
+            return Configuration.CreateNodeServices(new NodeServicesOptions
+            {
                 HostingModel = hostingModel,
                 ProjectPath = Directory.GetCurrentDirectory(),
-                WatchFileExtensions = new string[] {} // Don't watch anything
+                WatchFileExtensions = new string[] { } // Don't watch anything
             });
         }
     }
