@@ -20,8 +20,6 @@ namespace Microsoft.AspNetCore.NodeServices
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
-	    private HttpClient _client;
-        private bool _disposed;
         private int _portNumber;
 
         public HttpNodeInstance(string projectPath, int port = 0, string[] watchFileExtensions = null)
