@@ -13,12 +13,6 @@ namespace ConsoleApplication
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("InputOutputStream");
-            using (var nodeServices = CreateNodeServices(NodeHostingModel.InputOutputStream))
-            {
-                MeasureLatency(nodeServices).Wait();
-            }
-
             Console.WriteLine("Http");
             using (var nodeServices = CreateNodeServices(NodeHostingModel.Http))
             {
