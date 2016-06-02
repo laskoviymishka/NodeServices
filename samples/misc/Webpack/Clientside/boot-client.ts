@@ -1,16 +1,15 @@
 import { MainComponent } from './main.component';
 import './styles/main.less';
 
-declare var name: string;
+declare var model: any;
 declare var window: any;
-let component = new MainComponent();
-component.name = name;
-component.doIt();
-component.bind(boot);
+let component = new MainComponent(
+  document.getElementById('app-container'),
+  document.getElementById('some-input'),
+  model.bar);
 
-function boot() {
-  document.getElementById('app-container').innerHTML = component.render();
-}
+component.sayHi();
+component.bind();
 
 declare var module: any;
 if (module.hot) {

@@ -8,9 +8,19 @@ namespace Webpack.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(string name = "Some predifined param")
         {
-            return View();
+            return View(new SampleModel
+            {
+                Bar = name,
+                Foo = "hardcoded value"
+            });
         }
+    }
+
+    public class SampleModel
+    {
+        public string Foo { get; set; }
+        public string Bar { get; set; }
     }
 }

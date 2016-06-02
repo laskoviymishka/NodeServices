@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "dependencies": {
     "aspnet-prerendering": "^1.0.1",
-    "es6-promise": "^3.2.1"
+    "es6-promise": "^3.2.1",
+    "jsdom": "^9.2.1"
   },
   "devDependencies": {
     "aspnet-webpack": "^1.0.3",

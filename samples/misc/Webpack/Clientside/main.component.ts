@@ -1,24 +1,21 @@
 export class MainComponent {
-  public name: string;
-  public doIt() {
-    console.log(`Hello from ${this.name}`);
+  constructor(public elem: HTMLElement, public input: HTMLElement, private _name: string) { }
+
+  public sayHi() {
+    console.log(`Hello from ${this._name}`);
   }
 
-  public alreadyDoneIt() {
-    console.log('Hello already Done It!');
+  public bind() {
+    this.input.addEventListener('keyup', this._handleInput.bind(this));
   }
 
-  public bind(rerender) {
-    let that = this;
-    let elem = (<HTMLInputElement>document.getElementById('some-input'));
-    elem.value = that.name;
-    elem.addEventListener('keyup', function (event) {
-      that.name = elem.value;
-      rerender();
-    });
+  public render() {
+    this.input.setAttribute('value', this._name);
+    this.elem.innerHTML = '<h1>Hello from main compoent for ' + this._name + '</h1>';
   }
 
-  public render(): string {
-    return '<h1>Hello from main compoent for ' + this.name + '</h1>';
+  private _handleInput(event) {
+    this._name = this.input.getAttribute('value');
+    this.render();
   }
 }

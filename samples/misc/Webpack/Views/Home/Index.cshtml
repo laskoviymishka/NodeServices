@@ -1,13 +1,11 @@
 @{
     ViewData["Title"] = "Home Page";
-    var serverHello = "server hello";
 }
 
-Hi there. Enter some text: <input id="some-input"/>
-<div id="app-container"
-     asp-prerender-module="Clientside/boot-server"
-     asp-prerender-model="serverHello"
-     asp-prerender-webpack-config="webpack.config.js"></div>
+<app asp-prerender-module="Clientside/boot-server"
+     asp-prerender-model="Model"
+     asp-prerender-webpack-config="webpack.config.js">
+</app>
 
 @section scripts {
     <script src="dist/main.js"></script>
