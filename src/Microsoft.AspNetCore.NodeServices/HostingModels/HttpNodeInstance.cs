@@ -1,5 +1,4 @@
 using System;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -21,6 +20,8 @@ namespace Microsoft.AspNetCore.NodeServices
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
+	    private HttpClient _client;
+        private bool _disposed;
         private int _portNumber;
 
         public HttpNodeInstance(string projectPath, int port = 0, string[] watchFileExtensions = null)
@@ -93,20 +94,6 @@ namespace Microsoft.AspNetCore.NodeServices
         {
             // Prepare to receive a new port number
             _portNumber = 0;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-            if (!_disposed)
-            {
-                if (!disposing)
-                {
-                    _client.Dispose();
-                }
-
-                _disposed = true;
-            }
         }
     }
 }
