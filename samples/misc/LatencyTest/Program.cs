@@ -11,10 +11,27 @@ namespace ConsoleApplication
     // but is a starting point for comparing the overhead of different hosting models and transports.
     public class Program
     {
-        public static void Main(string[] args) {
-            using (var nodeServices = CreateNodeServices(Configuration.DefaultNodeHostingModel)) {
+        public static void Main(string[] args)
+        {
+            Console.WriteLine("InputOutputStream");
+            using (var nodeServices = CreateNodeServices(NodeHostingModel.InputOutputStream))
+            {
                 MeasureLatency(nodeServices).Wait();
             }
+
+            Console.WriteLine("Http");
+            using (var nodeServices = CreateNodeServices(NodeHostingModel.Http))
+            {
+                MeasureLatency(nodeServices).Wait();
+            }
+
+            Console.WriteLine("Socket");
+            using (var nodeServices = CreateNodeServices(NodeHostingModel.Socket))
+            {
+                MeasureLatency(nodeServices).Wait();
+            }
+
+            Console.Read();
         }
 
         private static async Task MeasureLatency(INodeServices nodeServices)
